@@ -12,7 +12,7 @@ Quidol Cache used for our real time show and REST API.
 
 ## Configuration
 ```javascript
-const QuidolCache = require('@Redpill-paris/quidol-redis-cache');
+const QuidolCache = require('@redpill-paris/quidol-redis-cache');
 
 const redisOptions = {
   host: 'localhost',
@@ -70,7 +70,7 @@ await cache.set(`userInfo:${userId}`, {
 ## Exemple:
 
 ```javascript
-const QuidolCache = require('@Redpill-paris/quidol-redis-cache');
+const QuidolCache = require('@redpill-paris/quidol-redis-cache');
 
 const redisOptions = {
   host: 'localhost',
