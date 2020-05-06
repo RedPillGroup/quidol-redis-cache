@@ -1,0 +1,88 @@
+# quidol-redis-cache
+Quidol Cache used for our real time show and REST API.
+
+- Async-mutex included in this package for a reliable cache.
+- Only one connection used per redis Instance, if you instanciante multiple `QuidolCache` this will not open a new connection but use a connection already open.
+
+## Install
+
+```
+  yarn add @redpill-paris/quidol-redis-cache
+```
+
+## Configuration
+```javascript
+const QuidolCache = require('@Redpill-paris/quidol-redis-cache');
+
+const redisOptions = {
+  host: '',
+  port: '',
+}
+
+const cache = new QuidolCache({ redisOptions });
+```
+
+#### Parameters available:
+- **redisOptions**: ompatible with all options used in the connect from ioRedis.
+- **defaultTTL**: default expiration key in seconds(default 60).
+
+## Methods
+
+- **get**: `cache.get(key, storeFunction(optionnal))` return a Promise.
+If the cache is invalid or null the storeFunction will be executed and the result of this function will be stored in the cache.
+```javascript
+const userInfo = await cache.get(
+  `userInfo:${userId}`,
+  async () => {
+    /* Some Async things, fetch user info from DB or other sources.
+    ** The method passed in parameter can be sync or async it doesn't matter everything is handled in the package.
+    */
+    ...
+    return userInfo
+  }
+);
+```
+
+- **del**: `cache.del(key)` Return a Promise.
+```
+await cache.del(`userInfo:${userId}`);
+```
+- **set**: `cache.set(key, value)` Return a Promise
+```
+await cache.set(`userInfo:${userId}`, {
+  admin: true,
+  nickname: 'Kubessandra',
+});
+```
+
+## Exemple:
+
+```javascript
+const QuidolCache = require('@Redpill-paris/quidol-redis-cache');
+
+const redisOptions = {
+  host: 'localhost',
+  port: '6379',
+}
+const cache = new QuidolCache({ redisOptions });
+
+// Exemple for fetching user info with a cache of 60secs
+
+const userId = '123456';
+const userInfo = await cache.get(
+  `userInfo:${userId}`,
+  async () => {
+    /* Some Async things, fetch user info from DB or other sources.
+    ** The method passed in parameter can be sync or async it doesn't matter everything is handled in the package.
+    */
+    ...
+    return userInfo
+  }
+);
+
+// I can now use my userInfo without spamming the database everytime.
+console.log(userInfo);
+
+// If the user is Updated, you can del or set the key to invalide the cache and requesting a new fetch on the next req.
+await cache.del(`userInfo:${userId}`);
+```
