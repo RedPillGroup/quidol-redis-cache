@@ -15,20 +15,24 @@ Quidol Cache used for our real time show and REST API.
 const QuidolCache = require('@Redpill-paris/quidol-redis-cache');
 
 const redisOptions = {
-  host: '',
-  port: '',
+  host: 'localhost',
+  port: '6379',
 }
 
 const cache = new QuidolCache({ redisOptions });
 ```
 
 #### Parameters available:
-- **redisOptions**: ompatible with all options used in the connect from ioRedis.
+- **redisOptions**: compatible with all options used in the connect from ioRedis.
 - **defaultTTL**: default expiration key in seconds(default 60).
 
 ## Methods
 
-- **get**: `cache.get(key, storeFunction(optionnal))` return a Promise.
+- **get**:
+```javascript
+  cache.get(key, storeFunction(optionnal))
+```
+return a Promise.
 If the cache is invalid or null the storeFunction will be executed and the result of this function will be stored in the cache.
 ```javascript
 const userInfo = await cache.get(
@@ -43,12 +47,20 @@ const userInfo = await cache.get(
 );
 ```
 
-- **del**: `cache.del(key)` Return a Promise.
+- **del**: 
+```javascript
+cache.del(key)
 ```
+ Return a Promise.
+```javascript
 await cache.del(`userInfo:${userId}`);
 ```
-- **set**: `cache.set(key, value)` Return a Promise
+- **set**: 
+```javascript
+cache.set(key, value)
 ```
+Return a Promise
+```javascript
 await cache.set(`userInfo:${userId}`, {
   admin: true,
   nickname: 'Kubessandra',
