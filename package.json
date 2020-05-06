@@ -1,6 +1,6 @@
 {
   "name": "@redpill-paris/quidol-redis-cache",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Quidol redis cache sdk",
   "main": "index.js",
   "scripts": {
