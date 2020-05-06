@@ -16,5 +16,16 @@
     "type": "git",
     "url": "https://github.com/RedPillGroup/quidol-redis-cache"
   },
-  "homepage": "https://github.com/RedPillGroup/quidol-redis-cache#readme"
+  "homepage": "https://github.com/RedPillGroup/quidol-redis-cache#readme",
+  "keywords": [
+    "redis",
+    "node",
+    "quidol",
+    "cache",
+    "fast",
+    "mutex",
+    "javascript",
+    "ioredis",
+    "async-mutex"
+  ]
 }
