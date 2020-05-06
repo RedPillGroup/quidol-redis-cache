@@ -4,16 +4,17 @@ const Redis = require('ioredis');
 const redisMap = {};
 
 class Cache {
-  constructor({ defaultTTL = 60, port, host }) {
-    if (!port || !host) {
+  constructor({ defaultTTL = 60, redisOptions }) {
+    if (!redisOptions || !redisOptions.port || !redisOptions.host) {
+      if (!redisOptions) throw new Error('No redisOptions specified');
       throw new Error('Invalid port or host for redis Cache');
     }
+    const { host, port } = redisOptions;
     if (!redisMap[`${host}:${port}`]) {
-      redisMap[`${host}:${port}`] = new Redis(port, host);
+      redisMap[`${host}:${port}`] = new Redis(redisOptions);
     }
     this.redis = redisMap[`${host}:${port}`];
-    this.port = port;
-    this.host = host;
+    this.redisOptions = redisOptions;
     this.defaultTTL = defaultTTL;
     this.cache = new Redis(port, host);
     this.get = this.get.bind(this);
