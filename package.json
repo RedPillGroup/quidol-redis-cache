@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "aymeric@quidol.fr",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "async-mutex": "^0.2.2",
     "ioredis": "^4.16.3"
