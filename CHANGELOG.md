@@ -1,3 +1,12 @@
+## [2.0.2](https://github.com/RedPillGroup/quidol-redis-cache/compare/v2.0.1...v2.0.2) (2020-05-06)
+
+
+### Bug Fixes
+
+* type in readme ([7fd8ff2](https://github.com/RedPillGroup/quidol-redis-cache/commit/7fd8ff27daf7e745c909fdc92731abfd2112501a))
+
+
+
 ## [2.0.1](https://github.com/RedPillGroup/quidol-redis-cache/compare/v2.0.0...v2.0.1) (2020-05-06)
 
 
