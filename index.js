@@ -44,6 +44,7 @@ class Cache {
       return undefined;
     } finally {
       release();
+      delete this.mutexList[key];
     }
   }
 
