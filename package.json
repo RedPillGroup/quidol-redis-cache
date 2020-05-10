@@ -10,7 +10,8 @@
   "license": "MIT",
   "dependencies": {
     "async-mutex": "^0.2.2",
-    "ioredis": "^4.16.3"
+    "ioredis": "^4.16.3",
+    "object-hash": "^2.0.3"
   },
   "repository": {
     "type": "git",

@@ -1,25 +1,56 @@
 const { Mutex } = require('async-mutex');
 const Redis = require('ioredis');
+const objectHash = require('object-hash');
 
 const redisMap = {};
 
+/*
+** type: can be standalone or cluster
+*/
+
 class Cache {
-  constructor({ defaultTTL = 60, redisOptions }) {
-    if (!redisOptions || !redisOptions.port || !redisOptions.host) {
-      if (!redisOptions) throw new Error('No redisOptions specified');
-      throw new Error('Invalid port or host for redis Cache');
+  constructor({
+    defaultTTL = 60,
+    type = 'standalone',
+    redisClusterOptions,
+    redisOptions,
+  }) {
+    if (!redisOptions && type !== 'cluster') {
+      throw new Error(`No redisOptions specified for type:${type}`);
     }
+    if (!redisClusterOptions && type !== 'standalone') {
+      throw new Error(`No redisClusterOptions specified for type:${type}`);
+    }
+    if (redisOptions) {
+      this.setupStandalone(redisOptions);
+    } else {
+      this.setupCluster(redisClusterOptions);
+    }
+    this.defaultTTL = defaultTTL;
+    this.cache = this.redis;
+    this.get = this.get.bind(this);
+    this.set = this.set.bind(this);
+    this.mutexList = {};
+  }
+
+  setupCluster(clusterOptions) {
+    const optionsHash = objectHash(clusterOptions);
+    if (!redisMap[optionsHash]) {
+      redisMap[optionsHash] = new Redis.Cluster(clusterOptions);
+    }
+    this.redis = redisMap[optionsHash];
+  }
+
+  setupStandalone(redisOptions) {
     const { host, port } = redisOptions;
+    if (!host || !port) {
+      throw new Error('No port or host specified for redisOptions');
+    }
     if (!redisMap[`${host}:${port}`]) {
       redisMap[`${host}:${port}`] = new Redis(redisOptions);
     }
     this.redis = redisMap[`${host}:${port}`];
     this.redisOptions = redisOptions;
-    this.defaultTTL = defaultTTL;
-    this.cache = new Redis(port, host);
-    this.get = this.get.bind(this);
-    this.set = this.set.bind(this);
-    this.mutexList = {};
   }
 
   async get(key, storeFunction, ttl = this.defaultTTL) {
