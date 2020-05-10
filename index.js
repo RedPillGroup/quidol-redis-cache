@@ -26,6 +26,7 @@ class Cache {
     } else {
       this.setupCluster(redisClusterOptions);
     }
+    this.type = type;
     this.defaultTTL = defaultTTL;
     this.cache = this.redis;
     this.get = this.get.bind(this);
@@ -84,6 +85,9 @@ class Cache {
   }
 
   del(...keys) {
+    if (this.type === 'cluster') {
+      return Promise.all(keys.map(key => this.cache.del(key)));
+    }
     if (keys.length > 0) return this.cache.del(...keys);
     return undefined;
   }
