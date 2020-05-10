@@ -68,7 +68,7 @@ const userInfo = await cache.get(
 );
 ```
 
-- **del**: 
+### del: 
 ```javascript
 cache.del(key)
 ```
@@ -76,7 +76,7 @@ cache.del(key)
 ```javascript
 await cache.del(`userInfo:${userId}`);
 ```
-- **set**: 
+### set: 
 ```javascript
 cache.set(key, value)
 ```
