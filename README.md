@@ -11,6 +11,8 @@ Quidol Cache used for our real time show and REST API.
 ```
 
 ## Configuration
+
+### Redis Standalone
 ```javascript
 const QuidolCache = require('@redpill-paris/quidol-redis-cache');
 
@@ -21,10 +23,29 @@ const redisOptions = {
 
 const cache = new QuidolCache({ redisOptions });
 ```
+### Redis Cluster
+```javascript
+const QuidolCache = require('@redpill-paris/quidol-redis-cache');
+
+const redisClusterOptions = [
+  {
+    host: 'localhost',
+    port: '6379',
+  },
+  {
+    host: 'localhost',
+    port: '6380',
+  },
+]
+
+const cache = new QuidolCache({ redisClusterOptions, type: 'cluster' });
+```
 
 #### Parameters available:
 - **redisOptions**: compatible with all options used in the connect from ioRedis.
 - **defaultTTL**: default expiration key in seconds(default 60).
+- **type**: `cluster` or `standalone` default(standalone).
+- **redisClusterOptions**: options passed to Redis.Cluster();
 
 ## Methods
 
