@@ -1,3 +1,20 @@
+# [2.2.0](https://github.com/RedPillGroup/quidol-redis-cache/compare/v2.1.3...v2.2.0) (2020-05-15)
+
+
+### Features
+
+* add delAll method ([#2](https://github.com/RedPillGroup/quidol-redis-cache/issues/2)) ([1d36aa2](https://github.com/RedPillGroup/quidol-redis-cache/commit/1d36aa214bcdb16e62454af9764adde4796076c6))
+
+
+
+## [2.1.3](https://github.com/RedPillGroup/quidol-redis-cache/compare/v2.1.2...v2.1.3) (2020-05-10)
+
+
+
+## [2.1.2](https://github.com/RedPillGroup/quidol-redis-cache/compare/v2.1.1...v2.1.2) (2020-05-10)
+
+
+
 ## [2.1.1](https://github.com/RedPillGroup/quidol-redis-cache/compare/v2.1.0...v2.1.1) (2020-05-10)
 
 
