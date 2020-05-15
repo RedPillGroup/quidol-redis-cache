@@ -104,6 +104,39 @@ class Cache {
       return true;
     });
   }
+  
+  delAll(match, count = 100) {
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error('Timeout has occurred in delAll'))
+      }, 10000);
+      const promises = [];
+      const stream = this.cache.scanStream({ count, match });
+      let pipeline = this.cache.pipeline();
+      let nbWaiting = 0;
+      stream.on('data', (keys) => {
+        keys.forEach((key) => {
+          pipeline.del(key);
+        });
+        nbWaiting += keys.length;
+        if (nbWaiting > count) {
+          promises.push(new Promise(resolve => pipeline.exec(resolve)));
+          nbWaiting = 0;
+          pipeline = this.cache.pipeline();
+        }
+      });
+      stream.on('end', async () => {
+        promises.push(new Promise(resolve => pipeline.exec(resolve)));
+        await Promise.all(promises);
+        clearTimeout(timeout);
+        resolve();
+      });
+      stream.on('error', (error) => {
+        clearTimeout(timeout);
+        reject(error);
+      });
+    });
+  }
 
   flush() {
     this.cache.flushall('ASYNC');
