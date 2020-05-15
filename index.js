@@ -108,7 +108,7 @@ class Cache {
   delAll(match, count = 100) {
     return new Promise((resolve, reject) => {
       const timeout = setTimeout(() => {
-        reject(new Error('Timeout has occurred'))
+        reject(new Error('Timeout has occurred in delAll'))
       }, 10000);
       const promises = [];
       const stream = this.cache.scanStream({ count, match });

@@ -76,6 +76,14 @@ cache.del(key)
 ```javascript
 await cache.del(`userInfo:${userId}`);
 ```
+### delAll
+```javascript
+cache.delAll(match, count)
+```
+ Return a Promise.
+```javascript
+await cache.del(`userInfo:${userId}`);
+```
 ### set: 
 ```javascript
 cache.set(key, value)
@@ -118,4 +126,8 @@ console.log(userInfo);
 
 // If the user is Updated, you can del or set the key to invalide the cache and requesting a new fetch on the next req.
 await cache.del(`userInfo:${userId}`);
+
+// If there are multiple users, you can delete all this keys
+await cache.delAll('userInfo:*', 100);
 ```
+
