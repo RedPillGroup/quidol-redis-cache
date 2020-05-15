@@ -82,7 +82,7 @@ cache.delAll(match, count)
 ```
  Return a Promise.
 ```javascript
-await cache.del(`userInfo:${userId}`);
+await cache.delAll('userInfo:*', 100);
 ```
 ### set: 
 ```javascript
