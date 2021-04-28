@@ -4,6 +4,8 @@ const objectHash = require('object-hash');
 
 const redisMap = {};
 
+const clusterTypes = ['cluster', 'sentinel'];
+
 /*
 ** type: can be standalone, cluster or sentinel
 */
