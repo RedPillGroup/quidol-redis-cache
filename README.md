@@ -41,6 +41,22 @@ const redisClusterOptions = [
 const cache = new QuidolCache({ redisClusterOptions, type: 'cluster' });
 ```
 
+### Redis Cluster
+```javascript
+const QuidolCache = require('@redpill-paris/quidol-redis-cache');
+
+const redisSentinelOptions = {
+  sentinels: [
+    { host: "sentinel-1", port: 26379 },
+    { host: "sentinel-2", port: 26379 },
+    { host: "sentinel-3", port: 26379 }
+  ],
+  name: "mymaster"
+}
+
+const cache = new QuidolCache({ redisSentinelOptions, type: 'sentinel' });
+```
+
 #### Parameters available:
 - **redisOptions**: compatible with all options used in the connect from ioRedis.
 - **defaultTTL**: default expiration key in seconds(default 60).
