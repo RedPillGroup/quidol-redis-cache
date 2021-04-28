@@ -5,7 +5,7 @@ const objectHash = require('object-hash');
 const redisMap = {};
 
 /*
-** type: can be standalone or cluster
+** type: can be standalone, cluster or sentinel
 */
 
 class Cache {
@@ -13,25 +13,40 @@ class Cache {
     defaultTTL = 60,
     type = 'standalone',
     redisClusterOptions,
+    redisSentinelOptions,
     redisOptions,
   }) {
-    if (!redisOptions && type !== 'cluster') {
-      throw new Error(`No redisOptions specified for type:${type}`);
+    switch(type) {
+      case 'standalone':
+        if(!redisOptions) throw new Error(`No redisOptions specified for type:${type}`);
+        this.setupStandalone(redisOptions);
+        break;
+      case 'cluster':
+        if(!redisClusterOptions) throw new Error(`No redisClusterOptions specified for type:${type}`);
+        this.setupCluster(redisClusterOptions);
+        break;
+      case 'sentinel':
+        if(!redisSentinelOptions) throw new Error(`No redisSentinelOptions specified for type:${type}`);
+        this.setupSentinel(redisSentinelOptions);
+        break;
+      default:
+        throw new Error(`Unknown type:${type}`);
     }
-    if (!redisClusterOptions && type !== 'standalone') {
-      throw new Error(`No redisClusterOptions specified for type:${type}`);
-    }
-    if (redisOptions) {
-      this.setupStandalone(redisOptions);
-    } else {
-      this.setupCluster(redisClusterOptions);
-    }
+
     this.type = type;
     this.defaultTTL = defaultTTL;
     this.cache = this.redis;
     this.get = this.get.bind(this);
     this.set = this.set.bind(this);
     this.mutexList = {};
+  }
+
+  setupSentinel(clusterOptions) {
+    const optionsHash = objectHash(clusterOptions);
+    if (!redisMap[optionsHash]) {
+      redisMap[optionsHash] = new Redis(clusterOptions);
+    }
+    this.redis = redisMap[optionsHash];
   }
 
   setupCluster(clusterOptions) {
