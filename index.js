@@ -111,14 +111,14 @@ class Cache {
     if (!startStr) {
       return;
     }
-    const masters = cluster.nodes('master');
+    const masters = this.cache.nodes('master');
     return Promise.all(
       masters
         .map((node) => node.keys(`${startStr}*`))
         .then((keysAllNodes) => {
           return Promise.all(keysAllNodes.map((keys) => {
             return Promise.all(keys.map((key) => {
-              return this.del(key);
+              return this.cache.del(key);
             }))
           }));
         })
