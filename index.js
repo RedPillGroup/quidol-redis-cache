@@ -111,18 +111,20 @@ class Cache {
     if (!startStr) {
       return;
     }
-    const masters = this.cache.nodes('master');
-    return Promise.all(
-      masters
-        .map((node) => node.keys(`${startStr}*`))
-        .then((keysAllNodes) => {
-          return Promise.all(keysAllNodes.map((keys) => {
-            return Promise.all(keys.map((key) => {
-              return this.cache.del(key);
-            }))
-          }));
-        })
-    );
+    if (this.type === 'cluster') {
+      const masters = this.cache.nodes('master');
+      const keysAllNodes = await Promise.all(masters.map((node) => node.keys(`${startStr}*`)));
+      return Promise.all(keysAllNodes.map((keys) => {
+        return Promise.all(keys.map((key) => {
+          return this.cache.del(key);
+        }))
+      }));
+    } else {
+      const keys = await this.cache.keys(`${startStr}*`);
+      return Promise.all(keys.map((key) => {
+        this.cache.del(key);
+      }));
+    }
   }
   
   delAll(match, count = 100) {
