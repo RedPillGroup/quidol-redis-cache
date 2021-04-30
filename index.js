@@ -107,7 +107,7 @@ class Cache {
     return undefined;
   }
 
-  delStartWith(startStr = '') {
+  async delStartWith(startStr = '') {
     if (!startStr) {
       return;
     }
