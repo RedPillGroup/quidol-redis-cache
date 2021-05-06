@@ -4,7 +4,7 @@
   "description": "Quidol redis cache sdk",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --collectCoverage"
   },
   "author": "aymeric@quidol.fr",
   "license": "MIT",
@@ -28,5 +28,8 @@
     "javascript",
     "ioredis",
     "async-mutex"
-  ]
+  ],
+  "devDependencies": {
+    "jest": "^26.6.3"
+  }
 }
