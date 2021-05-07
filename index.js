@@ -170,7 +170,7 @@ class Cache {
   }
 
   static resetConnectionMap() {
-    redisMap.keys.map((key) => delete redisMap[key]);
+    Object.keys(redisMap).map((key) => delete redisMap[key]);
   }
 
   static getDefaults() {
