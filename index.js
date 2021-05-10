@@ -4,6 +4,8 @@ const objectHash = require('object-hash');
 
 const redisMap = {};
 
+const defaults = { scaleReads: "slave", enableOfflineQueue: false };
+
 /*
 ** type: can be standalone, cluster or sentinel
 */
@@ -15,19 +17,22 @@ class Cache {
     redisClusterOptions,
     redisSentinelOptions,
     redisOptions,
+    options = defaults
   }) {
+    if(!options) options = { scaleReads: "slave" };
+
     switch(type) {
       case 'standalone':
         if(!redisOptions) throw new Error(`No redisOptions specified for type:${type}`);
-        this.setupStandalone(redisOptions);
+        this.setupStandalone({...redisOptions, ...options});
         break;
       case 'cluster':
         if(!redisClusterOptions) throw new Error(`No redisClusterOptions specified for type:${type}`);
-        this.setupCluster(redisClusterOptions);
+        this.setupCluster(redisClusterOptions, options);
         break;
       case 'sentinel':
         if(!redisSentinelOptions) throw new Error(`No redisSentinelOptions specified for type:${type}`);
-        this.setupSentinel(redisSentinelOptions);
+        this.setupSentinel({...redisSentinelOptions, ...options});
         break;
       default:
         throw new Error(`Unknown type:${type}`);
@@ -49,10 +54,10 @@ class Cache {
     this.redis = redisMap[optionsHash];
   }
 
-  setupCluster(clusterOptions) {
+  setupCluster(clusterOptions, options) {
     const optionsHash = objectHash(clusterOptions);
     if (!redisMap[optionsHash]) {
-      redisMap[optionsHash] = new Redis.Cluster(clusterOptions);
+      redisMap[optionsHash] = new Redis.Cluster(clusterOptions, options);
     }
     this.redis = redisMap[optionsHash];
   }
@@ -162,6 +167,14 @@ class Cache {
 
   flush() {
     this.cache.flushall('ASYNC');
+  }
+
+  static resetConnectionMap() {
+    Object.keys(redisMap).map((key) => delete redisMap[key]);
+  }
+
+  static getDefaults() {
+    return defaults;
   }
 }
 
