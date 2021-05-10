@@ -4,7 +4,7 @@ const objectHash = require('object-hash');
 
 const redisMap = {};
 
-const defaults = { scaleReads: "slave" };
+const defaults = { scaleReads: "slave", enableOfflineQueue: false };
 
 /*
 ** type: can be standalone, cluster or sentinel
